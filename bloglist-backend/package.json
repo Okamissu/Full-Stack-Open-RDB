@@ -1,7 +1,19 @@
 {
+  "name": "bloglist-backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "dotenv": "^18.0.5",
+    "express": "^5.2.1",
     "pg": "^8.23.1",
     "sequelize": "^6.37.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
