@@ -10,15 +10,42 @@ import {
 import request from 'supertest';
 
 import app from '../index.js';
-import { Blog, syncModels } from '../models/index.js';
+import { Blog, syncModels, User } from '../models/index.js';
 import { sequelize, connectToDatabase } from '../util/db.js';
+import bcrypt from 'bcrypt';
 
 describe('Blog API', () => {
   let blogId;
+  let userId;
+  let token;
 
   beforeAll(async () => {
     await connectToDatabase();
     await syncModels();
+  });
+
+  beforeEach(async () => {
+    await User.destroy({ where: {} });
+
+    const user = await User.create({
+      username: 'alibaba@poczta.onet.pl',
+      name: 'Alice',
+      passwordHash: await bcrypt.hash('testpassword', 10),
+    });
+
+    userId = user.id;
+    expect(userId).toBeDefined();
+
+    const response = await request(app)
+      .post('/api/login')
+      .send({
+        username: 'alibaba@poczta.onet.pl',
+        password: 'testpassword',
+      })
+      .expect(200);
+
+    token = response.body.token;
+    expect(token).toBeDefined();
   });
 
   beforeEach(async () => {
@@ -29,6 +56,7 @@ describe('Blog API', () => {
       author: 'Alice',
       url: 'https://example.com',
       likes: 5,
+      userId: userId,
     });
 
     blogId = blog.id;
@@ -62,10 +90,12 @@ describe('Blog API', () => {
   test('POST /api/blogs creates a blog', async () => {
     const response = await request(app)
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         title: 'Test blog 2',
         author: 'Ali',
         url: 'https://exampul.com',
+        userId: userId,
       })
       .expect(201);
 
@@ -82,6 +112,7 @@ describe('Blog API', () => {
   test('POST /api/blogs with missing title returns an error', async () => {
     const response = await request(app)
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         author: 'Ali',
         url: 'https://exampul.com',
@@ -95,6 +126,7 @@ describe('Blog API', () => {
   test('PUT /api/blogs/:id updates specified blog', async () => {
     const response = await request(app)
       .put(`/api/blogs/${blogId}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ likes: 67 })
       .expect(200);
 
@@ -104,6 +136,7 @@ describe('Blog API', () => {
   test('DELETE /api/blogs/:id deleted specified blog', async () => {
     const response = await request(app)
       .delete(`/api/blogs/${blogId}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204);
 
     const blogs = await Blog.findAll();
