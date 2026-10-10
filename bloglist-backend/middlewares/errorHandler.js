@@ -1,5 +1,20 @@
 const errorHandler = (error, req, res, next) => {
-  console.error(error);
+  console.error(error.name, error.message);
+
+  if (
+    error.name === 'JsonWebTokenError' ||
+    error.name === 'TokenExpiredError'
+  ) {
+    return res.status(401).json({
+      error: 'token invalid or expired',
+    });
+  }
+
+  if (error.status === 401 || error.message === 'token missing') {
+    return res.status(401).json({
+      error: error.message || 'Unauthorized',
+    });
+  }
 
   if (error.name === 'NotFoundError' || error.status === 404) {
     return res.status(404).json({
