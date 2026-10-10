@@ -17,6 +17,9 @@ User.init(
       allowNull: false,
       validate: {
         notEmpty: true,
+        isEmail: {
+          msg: 'username must be a valid email address',
+        },
       },
     },
     name: {
