@@ -77,8 +77,8 @@ router.put('/:username', async (req, res, next) => {
       id: user.id,
       username: user.username,
       name: user.name,
-      created_at: user.createdAt,
-      updated_at: user.updatedAt,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     });
   } catch (error) {
     next(error);

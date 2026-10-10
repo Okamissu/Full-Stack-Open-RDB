@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const { Blog } = require('../models');
+const { Blog, User } = require('../models');
 const blogFinder = require('../middlewares/blogFinder');
+const tokenExtractor = require('../middlewares/tokenExtractor');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -11,9 +12,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', tokenExtractor, async (req, res, next) => {
   try {
-    const blog = await Blog.create({ ...req.body });
+    const user = await User.findByPk(req.decodedToken.id);
+
+    if (!user) {
+      return res.status(401).json({ error: 'user not found' });
+    }
+    
+    const blog = await Blog.create({ ...req.body, userId: user.id });
     return res.status(201).json(blog);
   } catch (error) {
     next(error);
