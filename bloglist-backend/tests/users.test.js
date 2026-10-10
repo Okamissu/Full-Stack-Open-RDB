@@ -81,4 +81,21 @@ describe('User API', () => {
       userBefore.updatedAt.getTime(),
     );
   });
+
+  test('POST /api/users creates a new user', async () => {
+    const newUser = { username: 'Xraxus', name: 'Camillo', password: 'Test12' };
+
+    const response = await request(app)
+      .post('/api/users')
+      .send(newUser)
+      .expect(201);
+
+    expect(response.body.user?.passwordHash).toBeUndefined();
+    expect(response.body.user?.password).toBeUndefined();
+
+    expect(response.body.username).toBe('Xraxus');
+    expect(response.body.name).toBe('Camillo');
+    expect(response.body.createdAt).toBeDefined();
+    expect(response.body.updatedAt).toBeDefined();
+  });
 });
