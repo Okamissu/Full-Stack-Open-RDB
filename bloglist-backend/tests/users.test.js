@@ -27,7 +27,7 @@ describe('User API', () => {
     await User.destroy({ where: {} });
 
     const user = await User.create({
-      username: 'AliBaba',
+      username: 'alibaba@poczta.onet.pl',
       name: 'Alice',
       passwordHash: await bcrypt.hash('testpassword', 10),
     });
@@ -43,7 +43,7 @@ describe('User API', () => {
     const response = await request(app).get('/api/users').expect(200);
 
     expect(response.body).toHaveLength(1);
-    expect(response.body[0].username).toBe('AliBaba');
+    expect(response.body[0].username).toBe('alibaba@poczta.onet.pl');
     expect(response.body[0].name).toBe('Alice');
 
     expect(response.body[0].createdAt).toBeDefined();
@@ -60,7 +60,7 @@ describe('User API', () => {
   test('GET /api/users/:id returns specified user', async () => {
     const response = await request(app).get(`/api/users/${userId}`).expect(200);
 
-    expect(response.body.username).toBe('AliBaba');
+    expect(response.body.username).toBe('alibaba@poczta.onet.pl');
     expect(response.body.name).toBe('Alice');
   });
 
@@ -83,7 +83,11 @@ describe('User API', () => {
   });
 
   test('POST /api/users creates a new user', async () => {
-    const newUser = { username: 'Xraxus', name: 'Camillo', password: 'Test12' };
+    const newUser = {
+      username: 'xraxus@poczta.onet.pl',
+      name: 'Camillo',
+      password: 'Test12',
+    };
 
     const response = await request(app)
       .post('/api/users')
@@ -93,7 +97,7 @@ describe('User API', () => {
     expect(response.body.user?.passwordHash).toBeUndefined();
     expect(response.body.user?.password).toBeUndefined();
 
-    expect(response.body.username).toBe('Xraxus');
+    expect(response.body.username).toBe('xraxus@poczta.onet.pl');
     expect(response.body.name).toBe('Camillo');
     expect(response.body.createdAt).toBeDefined();
     expect(response.body.updatedAt).toBeDefined();
