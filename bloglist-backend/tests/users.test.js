@@ -12,7 +12,7 @@ import {
 import request from 'supertest';
 
 import app from '../index.js';
-import { User, syncModels } from '../models/index.js';
+import { User, Blog, syncModels } from '../models/index.js';
 import { sequelize, connectToDatabase } from '../util/db.js';
 
 describe('User API', () => {
@@ -24,6 +24,7 @@ describe('User API', () => {
   });
 
   beforeEach(async () => {
+    await Blog.destroy({ where: {} });
     await User.destroy({ where: {} });
 
     const user = await User.create({

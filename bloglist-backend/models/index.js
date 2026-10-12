@@ -1,23 +1,13 @@
 const Blog = require('./blog');
 const User = require('./user');
 
-User.hasMany(Blog, {
-  foreignKey: {
-    name: 'userId',
-    allowNull: false,
-  },
-});
+User.hasMany(Blog, {});
 
-Blog.belongsTo(User, {
-  foreignKey: {
-    name: 'userId',
-    allowNull: false,
-  },
-});
+Blog.belongsTo(User, {});
 
 const syncModels = async () => {
-  await User.sync();
-  await Blog.sync();
+  await User.sync({ alter: true });
+  await Blog.sync({ alter: true });
 };
 
 module.exports = {

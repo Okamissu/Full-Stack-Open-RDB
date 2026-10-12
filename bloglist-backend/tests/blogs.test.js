@@ -25,6 +25,7 @@ describe('Blog API', () => {
   });
 
   beforeEach(async () => {
+    await Blog.destroy({ where: {} });
     await User.destroy({ where: {} });
 
     const user = await User.create({
@@ -46,10 +47,6 @@ describe('Blog API', () => {
 
     token = response.body.token;
     expect(token).toBeDefined();
-  });
-
-  beforeEach(async () => {
-    await Blog.destroy({ where: {} });
 
     const blog = await Blog.create({
       title: 'Test blog',
