@@ -5,7 +5,13 @@ const tokenExtractor = require('../middlewares/tokenExtractor');
 
 router.get('/', async (req, res, next) => {
   try {
-    const blogs = await Blog.findAll({});
+    const blogs = await Blog.findAll({
+      attributes: { exclude: ['userId'] },
+      include: {
+        model: User,
+        attributes: ['name'],
+      },
+    });
     return res.json(blogs);
   } catch (error) {
     next(error);
@@ -19,7 +25,7 @@ router.post('/', tokenExtractor, async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: 'user not found' });
     }
-    
+
     const blog = await Blog.create({ ...req.body, userId: user.id });
     return res.status(201).json(blog);
   } catch (error) {
@@ -41,10 +47,20 @@ router.put('/:id', blogFinder, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', blogFinder, async (req, res, next) => {
+router.delete('/:id', blogFinder, tokenExtractor, async (req, res, next) => {
   try {
-    await req.blog.destroy();
-    return res.status(204).end();
+    const user = await User.findByPk(req.decodedToken.id);
+
+    if (!user) {
+      return res.status(401).json({ error: 'user not found' });
+    }
+
+    if (user.id === req.blog.userId) {
+      await req.blog.destroy();
+      return res.status(204).end();
+    }
+
+    return res.status(401).json({ error: "cannot delete other user's blog" });
   } catch (error) {
     next(error);
   }
