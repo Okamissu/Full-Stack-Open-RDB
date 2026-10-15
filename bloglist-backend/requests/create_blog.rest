@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRyYWNvbmlhQHVzZXIuY29tIiwiaWQiOjEsImlhdCI6MTc5MjA1OTU1OH0.aS6GHHQnwjt0Kx6FxPNRiB_ZmurHXSQXTWqo-h6rAMY
+
+{
+  "author": "Harry Potter" ,
+    "title": "Philosopher's Stone",
+    "url": "https://www.hp.test",
+    "year": "2026"
+}
