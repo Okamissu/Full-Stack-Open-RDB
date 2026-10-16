@@ -64,7 +64,10 @@ router.get('/:id', async (req, res, next) => {
           model: Blog,
           as: 'readingBlogs',
           attributes: { exclude: ['userId'] },
-          through: { attributes: ['state', 'id'] },
+          through: {
+            attributes: ['state', 'id'],
+            where: req.query.read ? { state: req.query.read } : undefined,
+          },
           include: [
             {
               model: User,
@@ -110,7 +113,7 @@ router.get('/:id', async (req, res, next) => {
       })),
     };
 
-    res.json(userData);
+    res.json(user);
   } catch (error) {
     next(error);
   }

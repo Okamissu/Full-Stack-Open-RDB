@@ -4,5 +4,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRyY
 
 {
   "userId": 1,
-  "blogId": 1
+  "blogId": 2
 }
