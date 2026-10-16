@@ -1,0 +1,4 @@
+DELETE http://localhost:3001/api/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InV3dUB1c2VyLmNvbSIsImlkIjo0LCJpYXQiOjE3OTIxNTcyMjh9.98iQTo_7PeaaQMWqF-7UlMswHCl-PnUKc2OlLD1HJCU
+
