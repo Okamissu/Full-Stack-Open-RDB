@@ -64,7 +64,7 @@ router.get('/:id', async (req, res, next) => {
           model: Blog,
           as: 'readingBlogs',
           attributes: { exclude: ['userId'] },
-          through: { attributes: [] },
+          through: { attributes: ['state'] },
           include: [
             {
               model: User,
@@ -77,7 +77,37 @@ router.get('/:id', async (req, res, next) => {
     if (!user) {
       return res.status(404).end();
     }
-    res.json(user);
+
+    const userData = {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      blogs: user.blogs.map((blog) => ({
+        id: blog.id,
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes,
+        year: blog.year,
+        createdAt: blog.createdAt,
+        updatedAt: blog.updatedAt,
+      })),
+      readings: user.readingBlogs.map((blog) => ({
+        id: blog.id,
+        title: blog.title,
+        author: blog.user.name,
+        url: blog.url,
+        likes: blog.likes,
+        year: blog.year,
+        createdAt: blog.createdAt,
+        updatedAt: blog.updatedAt,
+        state: blog.userBlogs.state,
+      })),
+    };
+
+    res.json(userData);
   } catch (error) {
     next(error);
   }
