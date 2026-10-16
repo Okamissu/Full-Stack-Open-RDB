@@ -55,6 +55,24 @@ router.get('/:id', async (req, res, next) => {
   try {
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['passwordHash'] },
+      include: [
+        {
+          model: Blog,
+          attributes: { exclude: ['userId'] },
+        },
+        {
+          model: Blog,
+          as: 'readingBlogs',
+          attributes: { exclude: ['userId'] },
+          through: { attributes: [] },
+          include: [
+            {
+              model: User,
+              attributes: ['name'],
+            },
+          ],
+        },
+      ],
     });
     if (!user) {
       return res.status(404).end();

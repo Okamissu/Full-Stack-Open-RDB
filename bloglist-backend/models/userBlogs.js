@@ -21,6 +21,11 @@ UserBlogs.init(
       allowNull: false,
       references: { model: 'blogs', key: 'id' },
     },
+    state: {
+      type: DataTypes.ENUM('unread', 'read'),
+      allowNull: false,
+      defaultValue: 'unread',
+    },
   },
   {
     sequelize,
