@@ -64,7 +64,7 @@ router.get('/:id', async (req, res, next) => {
           model: Blog,
           as: 'readingBlogs',
           attributes: { exclude: ['userId'] },
-          through: { attributes: ['state'] },
+          through: { attributes: ['state', 'id'] },
           include: [
             {
               model: User,
@@ -103,7 +103,10 @@ router.get('/:id', async (req, res, next) => {
         year: blog.year,
         createdAt: blog.createdAt,
         updatedAt: blog.updatedAt,
-        state: blog.userBlogs.state,
+        readingList: {
+          state: blog.userBlogs.state,
+          id: blog.userBlogs.id,
+        },
       })),
     };
 
