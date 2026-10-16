@@ -9,7 +9,7 @@
     "start": "nodemon index.js",
     "test:vitest": "vitest run blogs.test.js users.test.js",
     "test:vitest:watch": "vitest blogs.test.js users.test.js",
-    "test": "TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js",
+    "test": "TESTING=true node --test --test-concurrency=1",
     "start:test": "TESTING=true node index.js"
   },
   "dependencies": {
