@@ -53,6 +53,9 @@ router.post('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
+    const readFilter =
+      req.query.read === undefined ? undefined : req.query.read === 'true';
+
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['passwordHash'] },
       include: [
@@ -66,7 +69,8 @@ router.get('/:id', async (req, res, next) => {
           attributes: { exclude: ['userId'] },
           through: {
             attributes: ['state', 'id'],
-            where: req.query.read ? { state: req.query.read } : undefined,
+            where:
+              readFilter === undefined ? undefined : { state: readFilter },
           },
           include: [
             {
@@ -108,13 +112,13 @@ router.get('/:id', async (req, res, next) => {
         createdAt: blog.createdAt,
         updatedAt: blog.updatedAt,
         readingList: {
-          state: blog.userBlogs.state,
+          read: blog.userBlogs.state,
           id: blog.userBlogs.id,
         },
       })),
     };
 
-    res.json(user);
+    res.json(userData);
   } catch (error) {
     next(error);
   }
