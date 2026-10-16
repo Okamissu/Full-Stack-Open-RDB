@@ -22,9 +22,9 @@ UserBlogs.init(
       references: { model: 'blogs', key: 'id' },
     },
     state: {
-      type: DataTypes.ENUM('unread', 'read'),
+      type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: 'unread',
+      defaultValue: false,
     },
   },
   {
