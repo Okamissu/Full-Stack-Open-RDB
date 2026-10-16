@@ -87,6 +87,7 @@ router.get('/:id', async (req, res, next) => {
       username: user.username,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      disabled: user.disabled,
       blogs: user.blogs.map((blog) => ({
         id: blog.id,
         title: blog.title,
